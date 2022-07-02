@@ -11,6 +11,7 @@ typedef struct Lista Lista;
 
 struct Item{
 	int val;
+	int key;
 };
 
 struct Block{
@@ -30,7 +31,9 @@ void LRemove(Lista *l, Item d);
 void Swap(Block *a, Block *b);
 void LImprime(Lista *l, int size);
 int FoldSize(int size);
-void LinearHash(int size);
-int KeyCalculate(int hash_value, int size);
+int LinearHashing(int size);
+int DoubleHashing(int size);
+int KeyCalculate1(int hash_value, int size);
+int KeyCalculate2(int hash_value, int size, int key);
 
 #endif
