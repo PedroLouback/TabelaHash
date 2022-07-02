@@ -60,61 +60,52 @@ void LImprime(Lista *l, int size)
 }
 
 // Faz com que o tamanho da hash passado dobre e seja o número primo proximo desse dobro
-int FoldSize(int size)
+int FoldSize(int vector_size)
 {
 
 	int i = 0, cont = 0;
 
-	size = size * 2; // dobra
+	vector_size = vector_size * 2; // dobra
 
 	// vai transformar em número primo
 	while (1)
 	{
-		for (i = 1; i <= size; i++)
+		for (i = 1; i <= vector_size; i++)
 		{
-			if (size % i == 0)
+			if (vector_size % i == 0)
 			{
 				cont++;
 			}
 		}
 		if (cont == 2)
 		{
-			return size;
+			return vector_size;
 		}
 		else
 		{
-			size++;
+			vector_size++;
 			cont = 0;
 		}
 	}
 }
 
-int LinearHashing(int size)
+int LinearHashing(int vector_size, int hash_size, int *input_vector)
 {
 
-	Lista LinearHashing[size];
+	Lista LinearHashing[hash_size];
 	Item aux;
 	int i = 0;
 	int key = 0, colision_count = 0;
 
-	for (i = 0; i < size; i++)
+	for (i = 0; i < hash_size; i++)
 	{
 		FLVazia(&LinearHashing[i]);
 	}
 
-	i = 0;
-	// vai inserir até quando o usuario permitir, colocando -1 ele interrope a inserção
-	while (1)
+	for (i = 0; i < vector_size; i++)
 	{
-		printf("\nInforme o %dº valor da Hash ou insira '-1' para interroper a inserção: ", i + 1);
-		scanf("%d", &aux.val);
-		if (aux.val == -1)
-		{
-			break;
-		}
-		else if (aux.val >= 0)
-		{
-			key = KeyCalculate1(aux.val, size); // primeiro calcula a chave com mod, depois verifica se tem valor dentro dela e ai insere
+		aux.val = input_vector[i];
+		key = KeyCalculate1(aux.val, hash_size); // primeiro calcula a chave com mod, depois verifica se tem valor dentro dela e ai insere
 			aux.key = key;
 			if (LinearHashing[key].first == LinearHashing[key].last)
 			{
@@ -124,99 +115,82 @@ int LinearHashing(int size)
 			else
 			{
 				colision_count++;
-				printf("\nOcorreu uma colisão na chave %d!\nTotal de colisões até o momento: %d\n", key, colision_count);
 				LInsert(&LinearHashing[key], aux);
 			}
-		}
-		i++;
 	}
-	printf("\nHouve um total de %d colisões utilizando a Hash Linear!\n", colision_count);
+	
 	return colision_count;
 }
 
-int DoubleHashing(int size)
+int DoubleHashing(int vector_size, int hash_size, int *input_vector)
 {
-	Lista DoubleHashing[size+1];
+	Lista DoubleHashing[hash_size + 1];
 	Item aux;
 	int i = 0, cont = 0;
 	int key = 0, colision_count = 0;
 
-	for (i = 0; i <= size; i++)
+	for (i = 0; i <= hash_size; i++)
 	{
 		FLVazia(&DoubleHashing[i]);
 	}
 
-	i = 0;
-	// vai inserir até quando o usuario permitir, colocando -1 ele interrope a inserção
-	while (1)
+	for (i = 0; i < vector_size; i++)
 	{
-		printf("\nInforme o %dº valor da Hash ou insira '-1' para interroper a inserção: ", i + 1);
-		scanf("%d", &aux.val);
-		if (aux.val == -1)
+		aux.val = input_vector[i];
+		key = KeyCalculate1(aux.val, hash_size); // primeiro calcula a chave com mod, depois verifica se tem valor dentro dela e ai insere
+		aux.key = key;
+		if (key == hash_size && cont == 0)
 		{
-			break;
+			LInsert(&DoubleHashing[key], aux);
+			cont++;
 		}
-		else if (aux.val >= 0)
+		else if (DoubleHashing[key].first == DoubleHashing[key].last)
 		{
-			key = KeyCalculate1(aux.val, size); // primeiro calcula a chave com mod, depois verifica se tem valor dentro dela e ai insere
+			/*verifica se vai haver colisão, se houver vai inserir mais uma posição da hash e somar um no contador de colisão */
+			LInsert(&DoubleHashing[key], aux);
+		}
+		else
+		{
+			colision_count++;
+			key = KeyCalculate2(aux.val, hash_size, key);
 			aux.key = key;
-			if (key == size && cont == 0)
+			if (DoubleHashing[key].first == DoubleHashing[key].last)
 			{
-				LInsert(&DoubleHashing[key], aux);
-				cont++;
-			}
-			else if (DoubleHashing[key].first == DoubleHashing[key].last)
-			{
-				/*verifica se vai haver colisão, se houver vai inserir mais uma posição da hash e somar um no contador de colisão */
+				/*verifica se vai haver colisão novamente */
 				LInsert(&DoubleHashing[key], aux);
 			}
 			else
 			{
 				colision_count++;
-				printf("\nOcorreu uma colisão na chave %d!\nTotal de colisões até o momento: %d\n", key, colision_count);
-				key = KeyCalculate2(aux.val, size, key);
-				aux.key = key;
-				if (DoubleHashing[key].first == DoubleHashing[key].last)
-				{
-					/*verifica se vai haver colisão novamente */
-					LInsert(&DoubleHashing[key], aux);
-				}
-				else
-				{
-					colision_count++;
-					printf("\nOcorreu uma colisão na chave %d!\nTotal de colisões até o momento: %d\n", key, colision_count);
-					LInsert(&DoubleHashing[key], aux);
-				}
+				LInsert(&DoubleHashing[key], aux);
 			}
 		}
-		i++;
 	}
-	printf("\nHouve um total de %d colisões utilizando a Hash Linear!\n", colision_count);
 	return colision_count;
 }
 
 // Vai achar a chave atraves da função mod
-int KeyCalculate1(int hash_value, int size)
+int KeyCalculate1(int hash_value, int hash_size)
 {
 
 	int key = 0;
 
-	key = hash_value % (size);
+	key = hash_value % (hash_size);
 
 	return key;
 }
 
 // Segundo calculo para a Hash Dupla
-int KeyCalculate2(int hash_value, int size, int key)
+int KeyCalculate2(int hash_value, int hash_size, int key)
 {
 
 	int calculation1 = 0;
 
-	key = hash_value % (size);
+	key = hash_value % (hash_size);
 
-	calculation1 = (hash_value * (key)) + (size-1);
+	calculation1 = (hash_value * (key)) + (hash_size - 1);
 
-	key = (key + calculation1) % size;
+	key = (key + calculation1) % hash_size;
 
 	return key;
 }

@@ -3,6 +3,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 #include<stdbool.h>
 
 typedef struct Item Item;
@@ -30,10 +31,10 @@ void LInsert(Lista *l, Item d);
 void LRemove(Lista *l, Item d);
 void Swap(Block *a, Block *b);
 void LImprime(Lista *l, int size);
-int FoldSize(int size);
-int LinearHashing(int size);
-int DoubleHashing(int size);
-int KeyCalculate1(int hash_value, int size);
-int KeyCalculate2(int hash_value, int size, int key);
+int FoldSize(int vector_size);
+int LinearHashing(int vector_size, int hash_size, int *input_vector);
+int DoubleHashing(int vector_size, int hash_size, int *input_vector);
+int KeyCalculate1(int hash_value, int hash_size);
+int KeyCalculate2(int hash_value, int hash_size, int key);
 
 #endif
