@@ -32,73 +32,67 @@ Foi proposto pelo professor [Michel Pires da Silva](http://lattes.cnpq.br/144990
 Onde foi obtido exito na implementação das duas tabelas. O trabalho deve receber diretamente no seu código um vetor de no mínimo 20 valores inteiros, os quais serão utilizados como entrada para as duas estruturas que vão ser criadas como o dobro do tamanho do vetor (i.e., número primo maior que esse valor dobro).
 O propósito desse trabalho é apresentar e analisar o número de colisões ocorridas para ambas as estruturas quando o mesmo vetor é armazenado, apresentando uma breve discussão dos motivos que levaram uma apresentar melhores resultados.
 
-A estrutura `Hash de Endereçamento Fechado` ...
+A estrutura `Hash de Endereçamento Fechado` a busca é feita, pirmieramente, calculando-se o valor da função _hash_ para a chave apresentada como entrada, no algoritmo foi utilizado a função _*mod*_ para encontrar a chave, constitui no método mais simples sendo o resto da divisão entre o valor de inserção e o tamanho da _hash_ devendo ser um número primo. Feito a conversão da chave em uma posição, o dado é encontrado caminhando-se sequencialmente pela `Lista Linear`.
 
-A estrutura `Hash de Endereçamento Aberto por Hash Dupla` ...
-
-O algoritmo de busca `DFS` significa *Depth First Search*, sendo uma técnica que utiliza uma *Estrutura de dados Pilha* onde procura sempre explorar dando preferência a uma determinada direção a partir da posição inicial, empilhando as posições visitadas e desempilhando as posições que já foram passadas.
-
-O algoritmo de busca `BFS` significa *Breadth First Search* e consiste em uma técnica baseada em largura onde visita um elemento e todos os seus vizinhos, depois todo os vizinhos dos vizinhos e assim por diante. Para fazer isso, o algoritimo usa uma *Estrutura de dados Fila* em que o primeiro a entrar será o primeiro a sair sendo mais lento que o `DFS`
+A estrutura `Hash de Endereçamento Aberto por Hash Dupla` consiste no método de procurar a próxima posição vazia após o endereço base da chave colidir, e essa busca é feita através de uma outra função auxiliar em que pega o valor de inserção, multiplica pela posição do ultimo conflito e soma com tamanho da _hash_, após essa operação é feito um mod com a soma das funções utilizadas e o tamanho da hash, onde então é encontrado uma nova posição não havendo incrementos em 1 a cada interação.
 
 ---
 
 ## Representação gráfica das Tabelas Hash
 
-<p align="center">
-<img src="imgs/DFS.png" width="260px"/> 
+Segue o exemplo de uma estrutura `Hash de Endereçamento Fechado` onde é dado uma tabela de tamanho 5 cuja estrutura irá armazenar os seguintes valores nas chaves: 20, 25, 18, 62 e 85 
+
+<p align="left">
+<img src="img/hashlinear.png" width="450px"/> 
 </p>
 
-A representação mostra o início em (0x0) e os números que estão dentro das células mostram os passos percorridos até chegar ao final *@* (NxN), onde é visualizado a diferença na forma de caminhar nos dois algoritmos de busca.
+Segue o exemplo de uma estrutura `Hash de Endereçamento Aberto por Hash Dupla` onde é feita a tentativa de inserção do valor _27_ em sua chave mas é encontrado o conflito, demonstrando a utilização e aplicação das funções
 
-<p align="center">
-<img src="imgs/BFS.png" width="260px"/> 
+<p align="left">
+<img src="img/hashdupla.png" width="570px"/> 
 </p>
 
 ---
 
 ## Lógica
 
-Ao se deparar com proposta do problema citado na <a href="#apresentação">Apresentação</a> a dupla decidiu em utilizar apenas um programa principal no qual iria ler o arquivo citado nas regras de desenvolvimento do programa onde após a leitura iria ser chamado o método de busca em que era desejadO utilizar, sendo esses dois métodos implementados nesse programa principal, foi feito as inserções de uma [Fila Dinâmica](https://github.com/mpiress/dynamic_queue) e uma [Pilha Dinâmica](https://github.com/mpiress/dynamic_stack) onde foram clonadas dos respectivos repositorios para obter seus métodos básicos mantendo a proposta de cada algoritmo de busca requerido. O desenvolvimento da lógica de todo o problema foi desenvolvida em 3 sub etapas para que houvesse sucesso na resolução, sendo elas,  <a href="#•-funcionamento-da-leitura-do-arquivo">Funcionamento da leitura do arquivo </a>, <a href="#•-funcionamento-do-dfs">Funcionamento do DFS</a> e <a href="#•-funcionamento-do-bfs">Funcionamento do BFS</a>:
-
-### • Funcionamento da leitura do arquivo
-
-Para ser feita a leitura correta do arquivo primeiramente o nome do mesmo terá que ser `matriz` do tipo  *txt*, foi preciso pensar levando em consideração as regras propostas, resumindo então em ler o tamanho N da matriz na primeira linha utilizando a função _fscanf_ lendo apenas um número por se tratar de uma matriz quadrática sendo esse número adquirido pela variavel _tam_ para ser feita a construção da matriz alocando o seu tamanho de linhas e de colunas, após a leitura da primeira linha foi utilizado dois comandos `FOR` para que fosse possível ser feita a leitura da matriz dentro do arquivo constituindo de **zeros** (caminhos possível de se locomover) e **uns** (paredes de bloqueio) direcionando-a para o programa e armazenando-a nos espaçoes alocados sendo feito então toda a criação já da matriz com suas paredes de bloqueios. Para ser feito a leitura do tipo de método utilizado para busca foi pensando em ser feita novamente a leitura com a função _fscanf_ onde se usuário quiser utilizar o método `DFS` será necessário apenas modificar a ultima linha para **0** e caso se quiser utilizar o método `BFS`irá modificar para **1**, pois com isso o programa entenderá, a partir de um tratamento com `IFs` feito pela dupla que dependendo do valor citado seria feita a leitura desejada do método.
-Exemplo de entrada do arquivo `matriz.txt`: 
-
-<p align="center">
-<img src="imgs/ExplicacaoArquivo.png" width="500px"/> 
-</p>
-
+Ao se deparar com proposta do trabalho citado na <a href="#apresentação">Apresentação</a> foi decidido utilizar uma [Lista Linear](https://github.com/mpiress/linear_list) clonada do respectivo repositorio disponibilizado pelo professor para o inicio da resolução onde era primeiramente é introduzido a quantidade de valores para a alocação dinâmica, usando a função *malloc*, do vetor _input_vector_ para tornar possível a inserção dos valores aleatorios até 100 utilizando a função *rand* nesse vetor, com isso então era feito a chamada da primeira função, _*FoldSize*_ onde pega a quantidade de valores inseridos e transforma essa qauntidade e transforma no proximo número primo do seu dobro, determinando então o tamanho das `Tabelas Hash`, retornando um inteiro onde é passado como parâmetro para a primeira função de implementação da _hash_, sendo ela, _*LinearHashing*_ onde inicia com um vetor de `Lista Linear` sendo a _LinearHashing[hashsize]_ e com isso é iniciado o processo através de uma laço de repetição `FOR` que vai repetir conforme a quantidade de valores no vetor de entradas e a cada repetição vai ser calculado o *mod* entre o valor inserido e o tamanho da hash retornando a chave, com isso vai ser feita a verificação em uma estrutura de decisão `IF` se a primeira posição da _*LinearHashing*_ é igual a ultima posição, ou seja, se aquela _hash_ está vazia, caso esteja vazia é apenas inserido aquele valor na posição que corresponde a chave, caso não esteja vazia significa que houve uma colisão, registrando então essa colisão na variavel <i>colision_count</i> e adicionando na posição mesmo assim.
+A função prosseguida da citada acima, _*DoubleHashing*_ funciona da mesma forma que a _*LinearHashing*_ até ser encontrado uma colisão, onde a mesma é contabilizada também na variavel <i>colision_count</i> e após isso é chamada a segunda função que faz a procura de outra posição essa função consiste em: $$Func.Aux.(Valor) = (Valor*PosicaoConflito)+TamanhoHash$$ e após isso é feito um mod com a soma dessa função com a primeira função mod e o tamanho da hash, onde vai retornar uma nova posição como no <a href="#autor">exemplo gráfico</a> acima e apenas se for encontrado uma nova colisão que será colocado um valor em chave repetida.
+As duas funções de implementação das `Tabelas Hash` retornam seus números de colisões ocorridos durante o processo, com isso é possível ser feita a comparação ao final do programa de qual `Tabela Hash` ocorre o maior número de colisões, sendo possível ver esse resultado no tópico  <a href="#resultados-e-análises">Resultados e Análises</a>.
 
 ---
 
 ## Representação gráfica
 
-Segue a representação gráfica de um exemplo ilustrado dos dois diferentes algoritmos de busca e suas respectivas legendas aplicadas ao exemplo de matriz fornecidos pelo professor:
+Segue a representação gráfica de saída do programa, onde é possível verificar a quantidade de colisões em cada tipo de _hash_ e a inserção de valores para ocorrer esse processo
  
- • *Os número que estão dentro de cada celula representam respectivamente a posição do **i** e a posição do **j**, para que não haja confusão, onde ache que seja um valor*
+ • *Representação feita com a quantidade de valores pequena para melhor representatividade gráfica e melhor entedimento do processo, simplificando a representação*
 
-<p align="center" alt="Representação caminho percorrido.">
-<img src="imgs/Caminhos_bloqueados.png" width="500px"/><br/>
-<i><b>Matriz 1: </b>Representação apenas da matriz e suas parede de bloqueio</i>
+<p align="center" alt="Representação da saída do programa.">
+<img src="img/saida_programa.png" width="550px"/><br/>
 </p>
 
-<p align="center" alt="Representação caminho percorrido.">
-<img src="imgs/LEGENDA_DFS.png" width="600px"/><br/>
-<i><b>Matriz 2: </b>Representação matriz percorrida utilizando DFS</i>
+As representações abaixo demonstram como seria uma possível hash com os valores acima e suas colisões:
 
-<p align="center" alt="Representação caminho percorrido.">
-<img src="imgs/LEGENDA_BFS.png" width="600px"/><br/>
-<i><b>Matriz 3: </b>Representação matriz percorrida utilizando BFS</i>
+<p align="center" alt="Representação Hash Linear.">
+<img src="img/hashlinear1.png" width="700px"/><br/>
+<i><b>Imagem 1: </b>Representação da Hash Linear com os valores da representação acima</i>
 
-
+<p align="center" alt="Representação Hash Dupla.">
+<img src="img/hashdupla2.png" width="700px"/><br/>
+<i><b>Imagem 2: </b>Representação da Hash Dupla com os valores da representação acima</i>
 
 ---
 
 ## Resultados e Análises 
 
-<i>1</i> - Sim, diferentes tamanhos de matrizes e posicionamentos de paredes irão influenciar diretamente em qual dos métodos terá uma reposta mais eficiente. Para matrizes onde o número de paredes é consideravelmente alto ou as paredes se encontram em posições as quais formam uma espécie de caminho sem volta, o BFS retornará o resultado com um tempo de execução menor. Caso contrário, para matrizes onde o número de paredes é baixo, o DFS possui melhor performance, uma vez que a probabilidade de ficar preso em um corredor é mais baixa quando há poucas paredes, por consequência, DFS dará menos passos e retornará mais rápido que o BFS.<br/>
-<i>2</i>- O DFS busca o caminho dando preferência ao comando inicial (DESCER ou IR PARA DIREITA), isso implica que, suas decisões são tomadas apenas observando o próximo passo, não é levado em consideração que,  se o algoritmo optar por descer agora ao em vês de virar a direita, ele ficará sem mais para onde ir. Isso é uma característica de uma família de algoritmos chamados de Algorítmos gulosos. Então não, os algorítmos aqui apresentdos não possuem capacidade de encontrar o menor caminho até o seu destino.
+Segue a representação gráfica de saída do programa, onde é possível verificar a quantidade de colisões em cada tipo de _hash_ comparando suas colisões
+
+<p align="center" alt="Representação da saída do programa.">
+<img src="img/saida_programa2.png" width="550px"/><br/>
+</p>
+
+Ao visualizar o resultado na primeira representação acima do dois tipos de `Tabelas Hash` onde foi visto que a _*Hash Linear*_ obteve um total de 2 colisões e a _*Hash Dupla*_ obteve 3, conclui que a _*Hash Dupla*_ obteve um número maior de colisões em 100% dos testes feitos com o programa desenvolvido, vendo que ao ser chamada a função auxiliar na maioria das vezes retornava uma chave que já estava ocupada, ocasionando em uma outra colisão mas levando em vantagem que era espalhado melhor as chaves pelos endereços disponíveis não criando uma tabela com chaves com muitos valores
 
 ---
 

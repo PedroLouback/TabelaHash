@@ -9,10 +9,10 @@ int main()
 
     input_vector = malloc(vector_size*sizeof(int));
 
-    printf("\n");
+    srand(time(NULL));
     for(int i = 0; i < vector_size; i++){
         input_vector[i] = (rand() % 100);
-        printf("\nNúmero aleatorio preenchido na %dº posição: %d", i+1, input_vector[i]);
+        printf("\n%dº Valor aleatorio: %d", i+1, input_vector[i]);
     }
     printf("\n");
 
@@ -21,8 +21,8 @@ int main()
     colisionlinear_count = LinearHashing(vector_size, hash_size, input_vector);
     colisiondouble_count = DoubleHashing(vector_size, hash_size, input_vector);
 
-    printf("\nO total de colisões na Hash Linear foi de %d", colisionlinear_count);
-    printf("\nO total de colisões na Hash Dupla foi de %d\n", colisiondouble_count);
+    printf("\nOcorreu um total de %d colisões na Hash Linear", colisionlinear_count);
+    printf("\nOcorreu um total de %d colisões na Hash Dupla\n\n", colisiondouble_count);
 
     return 0;
 }
