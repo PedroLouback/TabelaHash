@@ -28,6 +28,7 @@ struct Hash{
 	Block *last;
 };
 
+void EscritaArquivo();
 void FHVazia(Hash *l);
 void HInsert(Hash *l, Item d);
 void HRemove(Hash *l, Item d);

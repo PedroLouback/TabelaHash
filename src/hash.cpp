@@ -8,6 +8,15 @@ void Swap(Block *a, Block *b)
 	b->data = aux;
 }
 
+void EscritaArquivo(){
+
+	cout << 
+	int lidaTxt[linhas][colunas];
+	ofstream file;
+	file.open("matriz.txt");
+
+}
+
 void FHVazia(Hash *l)
 {
 	l->first = (Block *)malloc(sizeof(Block));
@@ -91,7 +100,6 @@ int FoldSize(int vector_size)
 
 void LinearHashing(int vector_size, int hash_size, int *input_vector)
 {
-	Block *aux2;
 	Hash LinearHashing[hash_size];
 	Item aux;
 	int i = 0;
