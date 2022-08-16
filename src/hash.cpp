@@ -1,4 +1,4 @@
-#include "list.h"
+#include "hash.hpp"
 
 void Swap(Block *a, Block *b)
 {
@@ -8,14 +8,14 @@ void Swap(Block *a, Block *b)
 	b->data = aux;
 }
 
-void FLVazia(Lista *l)
+void FHVazia(Hash *l)
 {
 	l->first = (Block *)malloc(sizeof(Block));
 	l->last = l->first;
 	l->first->prox = NULL;
 }
 
-void LInsert(Lista *l, Item d)
+void HInsert(Hash *l, Item d)
 {
 	l->last->prox = (Block *)malloc(sizeof(Block));
 	l->last = l->last->prox;
@@ -23,13 +23,13 @@ void LInsert(Lista *l, Item d)
 	l->last->prox = NULL;
 }
 
-void LRemove(Lista *l, Item d)
+void HRemove(Hash *l, Item d)
 {
 	Block *aux, *tmp;
 
 	if (l->first == l->last || l == NULL || l->first->prox == NULL)
 	{
-		printf("LISTA VAZIA!\n");
+		printf("Hash VAZIA!\n");
 		return;
 	}
 
@@ -51,7 +51,7 @@ void LRemove(Lista *l, Item d)
 	}
 }
 
-void LImprime(Lista *l, int size)
+void HImprime(Hash *l, int size)
 {
 	for (int i = 0; i < size; i++)
 	{
@@ -89,17 +89,17 @@ int FoldSize(int vector_size)
 	}
 }
 
-int LinearHashing(int vector_size, int hash_size, int *input_vector)
+void LinearHashing(int vector_size, int hash_size, int *input_vector)
 {
-
-	Lista LinearHashing[hash_size];
+	Block *aux2;
+	Hash LinearHashing[hash_size];
 	Item aux;
 	int i = 0;
-	int key = 0, colision_count = 0;
+	int key = 0;
 
 	for (i = 0; i < hash_size; i++)
 	{
-		FLVazia(&LinearHashing[i]);
+		FHVazia(&LinearHashing[i]);
 	}
 
 	for (i = 0; i < vector_size; i++)
@@ -110,63 +110,14 @@ int LinearHashing(int vector_size, int hash_size, int *input_vector)
 			if (LinearHashing[key].first == LinearHashing[key].last)
 			{
 				/*verifica se vai haver colisão, se houver vai inserir mais uma posição da hash e somar um no contador de colisão */
-				LInsert(&LinearHashing[key], aux);
+				HInsert(&LinearHashing[key], aux);
 			}
 			else
 			{
-				colision_count++;
-				LInsert(&LinearHashing[key], aux);
+				HInsert(&LinearHashing[key], aux);
 			}
 	}
-	
-	return colision_count;
-}
 
-int DoubleHashing(int vector_size, int hash_size, int *input_vector)
-{
-	Lista DoubleHashing[hash_size + 1];
-	Item aux;
-	int i = 0, cont = 0;
-	int key = 0, colision_count = 0;
-
-	for (i = 0; i <= hash_size; i++)
-	{
-		FLVazia(&DoubleHashing[i]);
-	}
-
-	for (i = 0; i < vector_size; i++)
-	{
-		aux.val = input_vector[i];
-		key = KeyCalculate1(aux.val, hash_size); // primeiro calcula a chave com mod, depois verifica se tem valor dentro dela e ai insere
-		aux.key = key;
-		if (key == hash_size && cont == 0)
-		{
-			LInsert(&DoubleHashing[key], aux);
-			cont++;
-		}
-		else if (DoubleHashing[key].first == DoubleHashing[key].last)
-		{
-			/*verifica se vai haver colisão, se houver vai inserir mais uma posição da hash e somar um no contador de colisão */
-			LInsert(&DoubleHashing[key], aux);
-		}
-		else
-		{
-			colision_count++;
-			key = KeyCalculate2(aux.val, hash_size, key);
-			aux.key = key;
-			if (DoubleHashing[key].first == DoubleHashing[key].last)
-			{
-				/*verifica se vai haver colisão novamente */
-				LInsert(&DoubleHashing[key], aux);
-			}
-			else
-			{
-				colision_count++;
-				LInsert(&DoubleHashing[key], aux);
-			}
-		}
-	}
-	return colision_count;
 }
 
 // Vai achar a chave atraves da função mod
@@ -176,21 +127,6 @@ int KeyCalculate1(int hash_value, int hash_size)
 	int key = 0;
 
 	key = hash_value % (hash_size);
-
-	return key;
-}
-
-// Segundo calculo para a Hash Dupla
-int KeyCalculate2(int hash_value, int hash_size, int key)
-{
-
-	int calculation1 = 0;
-
-	key = hash_value % (hash_size);
-
-	calculation1 = (hash_value * (key)) + (hash_size - 1);
-
-	key = (key + calculation1) % hash_size;
 
 	return key;
 }
