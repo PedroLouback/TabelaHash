@@ -29,6 +29,7 @@ struct Hash{
 };
 
 void EscritaArquivo();
+void ManipulaMatriz(int i1, int j1, int i2, int j2);
 void FHVazia(Hash *l);
 void HInsert(Hash *l, Item d);
 void HRemove(Hash *l, Item d);

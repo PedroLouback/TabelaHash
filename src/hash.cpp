@@ -8,13 +8,36 @@ void Swap(Block *a, Block *b)
 	b->data = aux;
 }
 
-void EscritaArquivo(){
+void EscritaArquivo()
+{
 
-	cout << 
-	int lidaTxt[linhas][colunas];
+	int matrix_size;
+
+	cout << "\nInforme quantas linhas e colunas vai compor a matriz principal: ";
+	cin >> matrix_size;
+
+	int value;
 	ofstream file;
 	file.open("matriz.txt");
+	if (!file)
+	{
+		cout << "Arquivo matriz.txt nao pode ser aberto" << endl;
+		abort();
+	}
+	srand(time(NULL));
+	for (int i = 0; i < matrix_size; i++)
+	{
+		for (int j = 0; j < matrix_size; j++)
+		{
+			value = (rand() % 100);
+			file << value << "\t";
+		}
+		file << "\n";
+	}
 
+	file.close();
+
+	cout << "\nArquivo com uma matriz " << matrix_size << " x " << matrix_size << " criado com sucesso!" << endl;
 }
 
 void FHVazia(Hash *l)
@@ -114,18 +137,17 @@ void LinearHashing(int vector_size, int hash_size, int *input_vector)
 	{
 		aux.val = input_vector[i];
 		key = KeyCalculate1(aux.val, hash_size); // primeiro calcula a chave com mod, depois verifica se tem valor dentro dela e ai insere
-			aux.key = key;
-			if (LinearHashing[key].first == LinearHashing[key].last)
-			{
-				/*verifica se vai haver colisão, se houver vai inserir mais uma posição da hash e somar um no contador de colisão */
-				HInsert(&LinearHashing[key], aux);
-			}
-			else
-			{
-				HInsert(&LinearHashing[key], aux);
-			}
+		aux.key = key;
+		if (LinearHashing[key].first == LinearHashing[key].last)
+		{
+			/*verifica se vai haver colisão, se houver vai inserir mais uma posição da hash e somar um no contador de colisão */
+			HInsert(&LinearHashing[key], aux);
+		}
+		else
+		{
+			HInsert(&LinearHashing[key], aux);
+		}
 	}
-
 }
 
 // Vai achar a chave atraves da função mod
